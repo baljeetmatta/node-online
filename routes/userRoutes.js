@@ -8,6 +8,9 @@ const path=require("path")
 //post->/login /register
 routes.get("/login",(req,res)=>{
     //absoulte path
+    if(req.session.user)
+        res.redirect("/auth/dashboard")
+    else
     res.sendFile(path.join (__dirname,"../login.html"));
 
 })
@@ -25,7 +28,10 @@ routes.post("/login",(req,res)=>{
             if(results.length==0)
                 res.send("Invalid user/password");
             else
-                res.redirect("/auth/Dashboard");
+            {
+                req.session.user=req.body.username;
+                    res.redirect("/auth/Dashboard");
+            }
 
 
         }
@@ -81,5 +87,19 @@ routes.post("/register",(req,res)=>{
 });
 
 module.exports=routes;
+//session Management
+//http->Connection Less
+//Client->Server->New REquest
+//Login->Credentials ->Store
+//State Management 
+// Objects -> Cookies, Session
+//Cookies -> Client side information to stored on client
+// 1. Temp file ->Browser->Domain -> Expiry period->DAte/time
+// Date/time ->Server->Programmer 30 Min -> Antivirus
+// 2. File Browser -> file->Permission->Server Firewall
+//3. Security
+//Session -> Client side information to be stored on server
+//Timeout->Non Activity Period 5 min
+
 
 
